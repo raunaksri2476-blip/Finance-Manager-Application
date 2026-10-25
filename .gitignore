@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+finance-manager/backend/node_modules/
+finance-manager/frontend/node_modules/
+
+# Build outputs
+dist/
+build/
+finance-manager/frontend/dist/
+android/.gradle/
+android/app/build/
+android/build/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+finance-manager/backend/.env
+finance-manager/frontend/.env
+
+# Python / Test caches
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+npm-debug.log*
+
+# Local backend secrets
+backend/.env
+
