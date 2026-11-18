@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MyBudget – Mobile Finance App</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS Client v2 via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #09090b;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-[#09090b] text-white flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+  <!-- iPhone Mockup Frame -->
+  <div class="relative w-full max-w-[390px] h-[840px] rounded-[52px] bg-[#0c0c0e] border-[8px] border-[#2c2b30] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] ring-1 ring-zinc-800 overflow-hidden flex flex-col my-auto" style="width: 390px; height: 840px; border-radius: 50px; border: 8px solid #2c2b30; background: #0c0c0e; box-shadow: 0 25px 60px -15px rgba(0,0,0,0.9); overflow: hidden; display: flex; flex-direction: column;">
+    
+    <!-- Status Bar & Dynamic Island -->
+    <div class="relative z-30 pt-3 pb-1 px-7 flex items-center justify-between text-white text-[13px] font-semibold bg-transparent">
+      <span>9:41</span>
+      <div class="w-24 h-[22px] bg-black rounded-full border border-zinc-800/80 flex items-center justify-end px-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-zinc-900 border border-zinc-800"></span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.2 19.57 10.55 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <!-- App Main Screen Content -->
+    <div id="app-content" class="flex-1 overflow-y-auto custom-scrollbar relative pb-20">
+      
+      <!-- Header -->
+      <header class="flex items-center justify-between gap-3 pt-3 pb-4 px-4">
+        <div class="w-10 h-10 rounded-full overflow-hidden border border-zinc-700 p-0.5 bg-zinc-900 flex-shrink-0">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover rounded-full" />
+        </div>
+        <div class="flex-1 flex items-center gap-2 bg-[#1c1c20] border border-zinc-800/80 px-3.5 py-2 rounded-2xl">
+          <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span class="text-zinc-400 text-sm font-medium">Search</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button class="w-10 h-10 rounded-2xl flex items-center justify-center text-zinc-300 hover:bg-zinc-800">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </button>
+          <button class="w-10 h-10 rounded-2xl flex items-center justify-center text-zinc-300 hover:bg-zinc-800 relative">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-purple-500 rounded-full"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Wallet Card -->
+      <div class="px-4 mb-3">
+        <div class="relative overflow-hidden rounded-[26px] p-5 border border-[#2b2b32] bg-gradient-to-b from-[#242429] via-[#1a1a1e] to-[#121215] shadow-2xl">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-white text-sm font-medium">Wallet</span>
+            <button onclick="toggleAddModal()" class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+            </button>
+          </div>
+          <div class="text-zinc-400 text-sm mb-5" id="holder-name">Josh Hill</div>
+          <div class="mb-6 text-white text-[32px] font-extrabold tracking-tight font-sans" id="balance-display">$15,630.71</div>
+          <div class="flex items-center justify-between pt-1">
+            <div class="text-zinc-400 text-xs font-medium" id="account-label">Account ** 5087</div>
+            <div class="flex items-center gap-2">
+              <div class="flex items-center -space-x-2">
+                <span class="w-4 h-4 rounded-full bg-[#eb001b] inline-block"></span>
+                <span class="w-4 h-4 rounded-full bg-[#f79e1b] inline-block opacity-90"></span>
+              </div>
+              <span class="text-zinc-400 text-xs font-mono">**** 3264</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Side-by-Side -->
+      <div class="grid grid-cols-2 gap-3 px-4 mb-3">
+        <div class="bg-[#18181b] border border-[#27272a] rounded-[24px] p-4 flex flex-col justify-between h-[116px]">
+          <div>
+            <h3 class="text-white text-[15px] font-semibold">Spending</h3>
+            <p class="text-zinc-400 text-xs mt-0.5">Spent in October</p>
+          </div>
+          <div class="flex items-center gap-1.5 w-full mt-2">
+            <div class="h-3.5 rounded-full bg-[#6320ee] flex-[2.6]"></div>
+            <div class="h-3.5 rounded-full bg-[#f43f5e] flex-[1.4]"></div>
+            <div class="h-3.5 rounded-full bg-[#10b981] flex-[1]"></div>
+            <div class="h-3.5 rounded-full bg-[#f59e0b] flex-[1]"></div>
+            <div class="h-3.5 rounded-full bg-[#3b82f6] flex-[0.8]"></div>
+          </div>
+        </div>
+
+        <div class="bg-[#18181b] border border-[#27272a] rounded-[24px] p-4 flex flex-col justify-between h-[116px]">
+          <div>
+            <h3 class="text-white text-[15px] font-semibold">Cash Back</h3>
+          </div>
+          <div class="flex items-center gap-1.5 mt-2">
+            <div class="w-8 h-8 rounded-xl bg-black border border-zinc-800 flex items-center justify-center font-black text-red-600 text-base">N</div>
+            <div class="w-8 h-8 rounded-xl bg-white flex items-center justify-center p-1">
+              <svg viewBox="0 0 24 24" class="w-5 h-5 fill-black"><path d="M21.707 5.293c-.391-.391-1.023-.391-1.414 0L7.5 18.086l-3.793-3.793c-.391-.391-1.023-.391-1.414 1.414l4.5 4.5c.391.391 1.023.391 1.414 0l13.5-13.5c.391-.391.391-1.023 0-1.414z"/></svg>
+            </div>
+            <div class="w-8 h-8 rounded-xl bg-[#da291c] flex items-center justify-center font-bold text-[#ffbc0d] text-lg">M</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Grid 4 Tiles -->
+      <div class="flex gap-3 px-4 mb-3 h-[122px]">
+        <div class="flex flex-col justify-between w-[56px] h-full flex-shrink-0">
+          <button onclick="alert('QR Scanner Simulator Active')" class="w-[56px] h-[56px] rounded-[18px] bg-[#18181b] border border-[#27272a] flex items-center justify-center text-zinc-300 hover:text-purple-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+          </button>
+          <button onclick="toggleAddModal()" class="w-[56px] h-[56px] rounded-[18px] bg-[#18181b] border border-[#27272a] flex items-center justify-center text-zinc-300 hover:text-emerald-400">
+            <svg class="w-6 h-6 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          </button>
+        </div>
+
+        <div class="flex-1 rounded-[24px] bg-[#18181b] border border-[#27272a] p-3.5 flex flex-col justify-between cursor-pointer">
+          <div class="w-8 h-8 rounded-xl bg-zinc-800 flex items-center justify-center text-purple-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+          </div>
+          <div class="text-white text-[13px] font-medium leading-snug">Tips And Training</div>
+        </div>
+
+        <div class="flex-1 rounded-[24px] bg-[#18181b] border border-[#27272a] p-3.5 flex flex-col justify-between cursor-pointer">
+          <div class="w-8 h-8 rounded-xl bg-zinc-800 flex items-center justify-center text-emerald-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          </div>
+          <div class="text-white text-[13px] font-medium leading-snug">All Services</div>
+        </div>
+      </div>
+
+      <!-- Refer and Earn Banner -->
+      <div class="px-4 mb-4">
+        <div class="relative overflow-hidden rounded-[24px] bg-[#18181b] border border-[#27272a] p-4 flex items-center justify-between shadow-lg">
+          <div class="z-10 max-w-[65%]">
+            <h3 class="text-white text-[15px] font-semibold">Refer and Earn</h3>
+            <p class="text-zinc-400 text-xs mt-1 leading-snug">Share a referral link to your friend and get rewarded</p>
+            <button onclick="alert('Referral Code: JOSH-MYBUDGET-25 Copied!')" class="mt-3.5 px-3.5 py-1.5 rounded-xl bg-[#27272a] hover:bg-[#323238] text-white text-xs font-medium">Learn more</button>
+          </div>
+          <div class="relative w-24 h-20 flex items-center justify-center flex-shrink-0">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-[#0a0a0d] via-[#1f1f26] to-[#40404c] border border-white/10 shadow-2xl flex items-center justify-center">
+              <div class="w-4 h-4 rounded-full bg-white/20 blur-[1px]"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="px-4 mb-4">
+        <div class="flex items-center justify-between mb-2.5">
+          <h3 class="text-white text-[15px] font-semibold">Recent Activity</h3>
+          <span class="text-purple-400 text-xs font-medium cursor-pointer">See all</span>
+        </div>
+        <div class="bg-[#18181b] border border-[#27272a] rounded-[24px] divide-y divide-zinc-800/60 overflow-hidden" id="tx-list">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="absolute bottom-0 left-0 right-0 bg-[#0c0c0e]/95 backdrop-blur-xl border-t border-zinc-800/80 px-4 py-2 z-40 select-none">
+      <div class="flex items-center justify-around">
+        <button class="flex flex-col items-center justify-center w-16 py-1 text-white font-bold">
+          <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span class="text-[11px] mt-1">Home</span>
+        </button>
+        <button onclick="alert('Budgets & Category Limits Active')" class="flex flex-col items-center justify-center w-16 py-1 text-zinc-500 hover:text-zinc-300">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span class="text-[11px] mt-1">Payment</span>
+        </button>
+        <button onclick="alert('Financial Insights & AI Analytics')" class="flex flex-col items-center justify-center w-16 py-1 text-zinc-500 hover:text-zinc-300 relative">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+          <span class="text-[11px] mt-1">Message</span>
+        </button>
+        <button onclick="alert('Settings & Biometric Preferences')" class="flex flex-col items-center justify-center w-16 py-1 text-zinc-500 hover:text-zinc-300">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
+          <span class="text-[11px] mt-1">More</span>
+        </button>
+      </div>
+      <div class="w-32 h-1 bg-white/20 rounded-full mx-auto mt-2"></div>
+    </nav>
+
+  </div>
+
+  <!-- Add Transaction Modal -->
+  <div id="add-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end justify-center p-4">
+    <div class="w-full max-w-[360px] bg-[#141417] border border-zinc-800 rounded-[32px] p-6 text-white shadow-2xl">
+      <div class="w-12 h-1 bg-zinc-700 rounded-full mx-auto mb-4"></div>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-lg">Add Transaction</h3>
+        <button onclick="toggleAddModal()" class="text-zinc-400 hover:text-white">✕</button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs text-zinc-400 block mb-1">Merchant / Title</label>
+          <input type="text" id="tx-title" placeholder="e.g., Coffee, Target" class="w-full bg-[#1c1c21] border border-zinc-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500" />
+        </div>
+        <div>
+          <label class="text-xs text-zinc-400 block mb-1">Amount ($)</label>
+          <input type="number" id="tx-amount" placeholder="0.00" class="w-full bg-[#1c1c21] border border-zinc-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500" />
+        </div>
+        <button onclick="saveTransaction()" class="w-full py-3 bg-purple-600 hover:bg-purple-500 font-bold rounded-xl text-sm mt-2">Save Transaction</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Supabase Live Credentials Configuration
+    const SUPABASE_URL = "https://cfywvihxafuqnkqxqvod.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_zgOjuNIBscNr10Hz30HVmw__hQ3X04a";
+
+    let supabaseClient = null;
+    let currentBalance = 15630.71;
+    let initialTransactions = [
+      { id: 1, title: 'Nike Official Store', category: 'Shopping', amount: 110.00, type: 'expense', date: 'Today', time: '14:24', icon: '🛍' },
+      { id: 2, title: 'Uber Eats - Sushi Bar', category: 'Dining', amount: 34.20, type: 'expense', date: 'Today', time: '12:15', icon: '🍱' },
+      { id: 3, title: 'Bi-Weekly Direct Payroll', category: 'Income', amount: 3250.00, type: 'income', date: 'Yesterday', time: '09:00', icon: '💰' }
+    ];
+
+    // Initialize Supabase Client via CDN if key is valid
+    if (window.supabase && SUPABASE_ANON_KEY) {
+      try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      } catch (err) {
+        console.log("Supabase initialization notice (using local fallback state):", err);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      updateBalanceDisplay();
+      renderTransactions(initialTransactions);
+      loadSupabaseData();
+    });
+
+    function updateBalanceDisplay() {
+      document.getElementById('balance-display').innerText = '$' + currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function renderTransactions(list) {
+      const txList = document.getElementById('tx-list');
+      txList.innerHTML = '';
+      list.forEach(tx => {
+        const isIncome = tx.type === 'income';
+        const iconSymbol = tx.icon || (isIncome ? '💰' : '🛍');
+        const formattedAmount = isIncome ? `+$${parseFloat(tx.amount).toFixed(2)}` : `-$${parseFloat(tx.amount).toFixed(2)}`;
+        const amountClass = isIncome ? 'text-emerald-400' : 'text-zinc-100';
+
+        const itemHTML = `
+          <div class="p-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-2xl bg-zinc-800 flex items-center justify-center text-purple-400 font-bold">${iconSymbol}</div>
+              <div>
+                <div class="text-white text-sm font-medium">${tx.title || 'Transaction'}</div>
+                <div class="text-zinc-400 text-xs">${tx.date || 'Today'} • ${tx.time || '12:00'}</div>
+              </div>
+            </div>
+            <div class="text-sm font-semibold ${amountClass}">${formattedAmount}</div>
+          </div>
+        `;
+        txList.insertAdjacentHTML('beforeend', itemHTML);
+      });
+    }
+
+    async function loadSupabaseData() {
+      if (!supabaseClient) return;
+
+      try {
+        // Query accounts table
+        const { data: accounts, error: accErr } = await supabaseClient.from('accounts').select('*');
+        if (!accErr && accounts && accounts.length > 0) {
+          const primaryAcc = accounts[0];
+          if (typeof primaryAcc.balance === 'number') {
+            currentBalance = primaryAcc.balance;
+          } else if (primaryAcc.balance) {
+            currentBalance = parseFloat(primaryAcc.balance);
+          }
+          if (primaryAcc.holder_name || primaryAcc.holderName) {
+            document.getElementById('holder-name').innerText = primaryAcc.holder_name || primaryAcc.holderName;
+          }
+          if (primaryAcc.account_number || primaryAcc.accountNumber) {
+            document.getElementById('account-label').innerText = 'Account ' + (primaryAcc.account_number || primaryAcc.accountNumber);
+          }
+          updateBalanceDisplay();
+        }
+
+        // Query transactions table (ordered by created_at desc)
+        const { data: txData, error: txErr } = await supabaseClient
+          .from('transactions')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (!txErr && txData && txData.length > 0) {
+          renderTransactions(txData);
+        }
+      } catch (err) {
+        console.log("Supabase fetch notice:", err);
+      }
+    }
+
+    function toggleAddModal() {
+      const modal = document.getElementById('add-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    async function saveTransaction() {
+      const title = document.getElementById('tx-title').value.trim() || 'Quick Expense';
+      const amountVal = parseFloat(document.getElementById('tx-amount').value) || 15.00;
+
+      // Update local state instantly for snappy UI
+      currentBalance -= amountVal;
+      updateBalanceDisplay();
+
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const newTxObj = {
+        title: title,
+        category: 'Dining',
+        amount: amountVal,
+        type: 'expense',
+        date: 'Today',
+        time: timeStr,
+        icon: '🛍'
+      };
+
+      // Prepend item to UI feed
+      const txList = document.getElementById('tx-list');
+      const itemHTML = `
+        <div class="p-3.5 flex items-center justify-between animate-pulse">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-2xl bg-zinc-800 flex items-center justify-center text-purple-400 font-bold">💳</div>
+            <div>
+              <div class="text-white text-sm font-medium">${title}</div>
+              <div class="text-zinc-400 text-xs">Just now</div>
+            </div>
+          </div>
+          <div class="text-sm font-semibold text-zinc-100">-$${amountVal.toFixed(2)}</div>
+        </div>
+      `;
+      txList.insertAdjacentHTML('afterbegin', itemHTML);
+
+      // Clear input fields and close modal
+      document.getElementById('tx-title').value = '';
+      document.getElementById('tx-amount').value = '';
+      toggleAddModal();
+
+      // Live Supabase Sync if Client initialized
+      if (supabaseClient) {
+        try {
+          // Insert into Supabase transactions table
+          await supabaseClient.from('transactions').insert([
+            {
+              title: title,
+              category: 'Dining',
+              amount: amountVal,
+              type: 'expense',
+              date: 'Today',
+              time: timeStr,
+              created_at: new Date().toISOString()
+            }
+          ]);
+
+          // Update balance in Supabase accounts table
+          await supabaseClient.from('accounts').update({ balance: currentBalance }).gt('id', -1);
+        } catch (err) {
+          console.log('Supabase sync notice:', err);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

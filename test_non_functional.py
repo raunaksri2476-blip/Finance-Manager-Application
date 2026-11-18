@@ -10,8 +10,7 @@ from pathlib import Path
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-CURRENT_DIR = Path(__file__).resolve().parent
-WORKSPACE_ROOT = CURRENT_DIR if (CURRENT_DIR / "dist").exists() else CURRENT_DIR.parent
+WORKSPACE_ROOT = Path(__file__).resolve().parent
 DIST_DIR = WORKSPACE_ROOT / "dist"
 SRC_DIR = WORKSPACE_ROOT / "src"
 TARGET_URL = "http://localhost:3000/"

@@ -30,7 +30,3 @@ Thumbs.db
 .idea/
 *.log
 npm-debug.log*
-
-# Local backend secrets
-backend/.env
-
