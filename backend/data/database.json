@@ -1,0 +1,379 @@
+{
+  "users": [
+    {
+      "name": "Raunak",
+      "email": "demo@financemanager.com",
+      "password": "$2a$10$CGuX4M67rLTU/nbpEp81eutzS9EVseL0fxkr.wcTMEbXA4GKurZ/m",
+      "phone": "+91 9876543210",
+      "currency": "INR",
+      "_id": "457ff858c62b0c643dfabd2a",
+      "dateFormat": "DD/MM/YYYY",
+      "theme": "light",
+      "createdAt": "2026-11-16T18:04:03.913Z",
+      "updatedAt": "2026-11-16T18:04:04.140Z"
+    }
+  ],
+  "accounts": [
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountName": "HDFC Savings",
+      "accountType": "Savings Account",
+      "balance": 45000,
+      "description": "Primary salary savings account",
+      "_id": "6909a0dd9ce5029de4695a2e",
+      "createdAt": "2026-11-16T18:04:04.171Z",
+      "updatedAt": "2026-11-16T18:04:04.171Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountName": "SBI Account",
+      "accountType": "Bank Account",
+      "balance": 30500,
+      "description": "Secondary bank account",
+      "_id": "ae3222309763f378848e1c6a",
+      "createdAt": "2026-11-16T18:04:04.173Z",
+      "updatedAt": "2026-11-16T18:04:04.174Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountName": "Cash Wallet",
+      "accountType": "Cash",
+      "balance": 4000,
+      "description": "Physical cash on hand",
+      "_id": "51ea191dcd2fb7c2ec101e79",
+      "createdAt": "2026-11-16T18:04:04.176Z",
+      "updatedAt": "2026-11-16T18:04:04.177Z"
+    }
+  ],
+  "categories": [
+    {
+      "categoryName": "Food",
+      "categoryType": "Expense",
+      "icon": "Utensils",
+      "color": "#EF4444",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "26fd903af6a9e87f2e92c8d5",
+      "createdAt": "2026-11-16T18:04:04.144Z",
+      "updatedAt": "2026-11-16T18:04:04.144Z"
+    },
+    {
+      "categoryName": "Transport",
+      "categoryType": "Expense",
+      "icon": "Car",
+      "color": "#F59E0B",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "71170a9c95dd5956fbda8795",
+      "createdAt": "2026-11-16T18:04:04.146Z",
+      "updatedAt": "2026-11-16T18:04:04.146Z"
+    },
+    {
+      "categoryName": "Shopping",
+      "categoryType": "Expense",
+      "icon": "ShoppingBag",
+      "color": "#EC4899",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "7f83f0b45c31215c87796d2b",
+      "createdAt": "2026-11-16T18:04:04.148Z",
+      "updatedAt": "2026-11-16T18:04:04.148Z"
+    },
+    {
+      "categoryName": "Bills",
+      "categoryType": "Expense",
+      "icon": "Receipt",
+      "color": "#3B82F6",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "e8a26651aa661def5468ba8d",
+      "createdAt": "2026-11-16T18:04:04.151Z",
+      "updatedAt": "2026-11-16T18:04:04.151Z"
+    },
+    {
+      "categoryName": "Entertainment",
+      "categoryType": "Expense",
+      "icon": "Film",
+      "color": "#8B5CF6",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "84070ea32bdc645b01473a39",
+      "createdAt": "2026-11-16T18:04:04.153Z",
+      "updatedAt": "2026-11-16T18:04:04.153Z"
+    },
+    {
+      "categoryName": "Education",
+      "categoryType": "Expense",
+      "icon": "GraduationCap",
+      "color": "#10B981",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "45b0debe0db848b554efccab",
+      "createdAt": "2026-11-16T18:04:04.156Z",
+      "updatedAt": "2026-11-16T18:04:04.156Z"
+    },
+    {
+      "categoryName": "Healthcare",
+      "categoryType": "Expense",
+      "icon": "HeartPulse",
+      "color": "#14B8A6",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "ccb636abb93f5b8fe51e8330",
+      "createdAt": "2026-11-16T18:04:04.158Z",
+      "updatedAt": "2026-11-16T18:04:04.158Z"
+    },
+    {
+      "categoryName": "Other",
+      "categoryType": "Expense",
+      "icon": "Tag",
+      "color": "#6B7280",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "0914c3756f748148497c2c01",
+      "createdAt": "2026-11-16T18:04:04.160Z",
+      "updatedAt": "2026-11-16T18:04:04.160Z"
+    },
+    {
+      "categoryName": "Salary",
+      "categoryType": "Income",
+      "icon": "Briefcase",
+      "color": "#10B981",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "719f64b2c3d11f7dd9d158ee",
+      "createdAt": "2026-11-16T18:04:04.162Z",
+      "updatedAt": "2026-11-16T18:04:04.162Z"
+    },
+    {
+      "categoryName": "Investment",
+      "categoryType": "Income",
+      "icon": "TrendingUp",
+      "color": "#06B6D4",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "865bb0868e6d815ba8513f68",
+      "createdAt": "2026-11-16T18:04:04.164Z",
+      "updatedAt": "2026-11-16T18:04:04.164Z"
+    },
+    {
+      "categoryName": "Freelance",
+      "categoryType": "Income",
+      "icon": "Laptop",
+      "color": "#6366F1",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "9e5e0b6a91b394d3b4585116",
+      "createdAt": "2026-11-16T18:04:04.166Z",
+      "updatedAt": "2026-11-16T18:04:04.166Z"
+    },
+    {
+      "categoryName": "Other",
+      "categoryType": "Income",
+      "icon": "Coins",
+      "color": "#8B5CF6",
+      "userID": "457ff858c62b0c643dfabd2a",
+      "_id": "efa89d2c1903b4932811e00d",
+      "createdAt": "2026-11-16T18:04:04.168Z",
+      "updatedAt": "2026-11-16T18:04:04.168Z"
+    }
+  ],
+  "transactions": [
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountID": "6909a0dd9ce5029de4695a2e",
+      "categoryID": "719f64b2c3d11f7dd9d158ee",
+      "amount": 75000,
+      "transactionType": "Income",
+      "transactionDate": "2026-11-01T18:04:04.179Z",
+      "description": "Monthly Salary Credit",
+      "_id": "824d6b2b071cd0100c3ca2d0",
+      "createdAt": "2026-11-16T18:04:04.180Z",
+      "updatedAt": "2026-11-16T18:04:04.180Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountID": "51ea191dcd2fb7c2ec101e79",
+      "categoryID": "26fd903af6a9e87f2e92c8d5",
+      "amount": 450,
+      "transactionType": "Expense",
+      "transactionDate": "2026-11-02T18:04:04.179Z",
+      "description": "Swiggy Dinner Order",
+      "_id": "210b90036ed0f4a4d2772544",
+      "createdAt": "2026-11-16T18:04:04.183Z",
+      "updatedAt": "2026-11-16T18:04:04.183Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountID": "ae3222309763f378848e1c6a",
+      "categoryID": "7f83f0b45c31215c87796d2b",
+      "amount": 2499,
+      "transactionType": "Expense",
+      "transactionDate": "2026-11-04T18:04:04.179Z",
+      "description": "Amazon Headphones",
+      "_id": "46534bd61b0bf9b6f3544c5d",
+      "createdAt": "2026-11-16T18:04:04.185Z",
+      "updatedAt": "2026-11-16T18:04:04.185Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountID": "51ea191dcd2fb7c2ec101e79",
+      "categoryID": "71170a9c95dd5956fbda8795",
+      "amount": 280,
+      "transactionType": "Expense",
+      "transactionDate": "2026-11-06T18:04:04.179Z",
+      "description": "Uber Ride to Office",
+      "_id": "3229f42c3522b49d70f653a2",
+      "createdAt": "2026-11-16T18:04:04.187Z",
+      "updatedAt": "2026-11-16T18:04:04.187Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountID": "ae3222309763f378848e1c6a",
+      "categoryID": "45b0debe0db848b554efccab",
+      "amount": 25000,
+      "transactionType": "Expense",
+      "transactionDate": "2026-11-08T18:04:04.179Z",
+      "description": "College Semester Fees",
+      "_id": "10f177a1bd407359b39953e0",
+      "createdAt": "2026-11-16T18:04:04.190Z",
+      "updatedAt": "2026-11-16T18:04:04.190Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountID": "6909a0dd9ce5029de4695a2e",
+      "categoryID": "e8a26651aa661def5468ba8d",
+      "amount": 2100,
+      "transactionType": "Expense",
+      "transactionDate": "2026-11-10T18:04:04.179Z",
+      "description": "Electricity Bill",
+      "_id": "fa6f509f6c6877c770e6481e",
+      "createdAt": "2026-11-16T18:04:04.192Z",
+      "updatedAt": "2026-11-16T18:04:04.192Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountID": "51ea191dcd2fb7c2ec101e79",
+      "categoryID": "26fd903af6a9e87f2e92c8d5",
+      "amount": 620,
+      "transactionType": "Expense",
+      "transactionDate": "2026-11-12T18:04:04.179Z",
+      "description": "Zomato Lunch",
+      "_id": "ca781d464a72e5fd6aaebe92",
+      "createdAt": "2026-11-16T18:04:04.194Z",
+      "updatedAt": "2026-11-16T18:04:04.194Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountID": "6909a0dd9ce5029de4695a2e",
+      "categoryID": "84070ea32bdc645b01473a39",
+      "amount": 649,
+      "transactionType": "Expense",
+      "transactionDate": "2026-11-13T18:04:04.179Z",
+      "description": "Netflix Monthly Subscription",
+      "_id": "de84ebe6bba51aafb31ea17e",
+      "createdAt": "2026-11-16T18:04:04.197Z",
+      "updatedAt": "2026-11-16T18:04:04.197Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "accountID": "6909a0dd9ce5029de4695a2e",
+      "categoryID": "26fd903af6a9e87f2e92c8d5",
+      "amount": 3500,
+      "transactionType": "Expense",
+      "transactionDate": "2026-11-15T18:04:04.179Z",
+      "description": "Monthly Supermarket Grocery",
+      "_id": "2a199eca5571a8b2231e1a2a",
+      "createdAt": "2026-11-16T18:04:04.199Z",
+      "updatedAt": "2026-11-16T18:04:04.199Z"
+    }
+  ],
+  "budgets": [
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "categoryID": "26fd903af6a9e87f2e92c8d5",
+      "budgetAmount": 8000,
+      "startDate": "2026-10-31T18:30:00.000Z",
+      "endDate": "2026-11-30T18:29:59.000Z",
+      "_id": "e5ce6df65a3b16ced0827dff",
+      "createdAt": "2026-11-16T18:04:04.202Z",
+      "updatedAt": "2026-11-16T18:04:04.202Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "categoryID": "7f83f0b45c31215c87796d2b",
+      "budgetAmount": 5000,
+      "startDate": "2026-10-31T18:30:00.000Z",
+      "endDate": "2026-11-30T18:29:59.000Z",
+      "_id": "0a838449a263ec7258b37d27",
+      "createdAt": "2026-11-16T18:04:04.205Z",
+      "updatedAt": "2026-11-16T18:04:04.205Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "categoryID": "e8a26651aa661def5468ba8d",
+      "budgetAmount": 5000,
+      "startDate": "2026-10-31T18:30:00.000Z",
+      "endDate": "2026-11-30T18:29:59.000Z",
+      "_id": "abf13aac6c89ef6f28c7993c",
+      "createdAt": "2026-11-16T18:04:04.208Z",
+      "updatedAt": "2026-11-16T18:04:04.208Z"
+    }
+  ],
+  "goals": [
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "goalName": "New Laptop",
+      "targetAmount": 80000,
+      "currentAmount": 35000,
+      "deadline": "2027-05-15T18:30:00.000Z",
+      "description": "Savings for M3 MacBook Pro",
+      "_id": "cea6f2f35635ed19663ed3d9",
+      "createdAt": "2026-11-16T18:04:04.211Z",
+      "updatedAt": "2026-11-16T18:04:04.211Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "goalName": "Emergency Fund",
+      "targetAmount": 150000,
+      "currentAmount": 75000,
+      "deadline": "2027-11-15T18:30:00.000Z",
+      "description": "6 months emergency expenses safety cushion",
+      "_id": "c3d928f2e562a15ce77a4954",
+      "createdAt": "2026-11-16T18:04:04.213Z",
+      "updatedAt": "2026-11-16T18:04:04.214Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "goalName": "Travel Fund",
+      "targetAmount": 50000,
+      "currentAmount": 20000,
+      "deadline": "2027-03-15T18:30:00.000Z",
+      "description": "Goa Vacation Trip",
+      "_id": "5bb26d55a5162e1c401a775e",
+      "createdAt": "2026-11-16T18:04:04.217Z",
+      "updatedAt": "2026-11-16T18:04:04.217Z"
+    }
+  ],
+  "notifications": [
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "title": "Salary Credited",
+      "message": "Your monthly salary of ₹75,000 has been credited to HDFC Savings.",
+      "type": "success",
+      "isRead": true,
+      "_id": "7c4ed9faf14366a2f1a3304d",
+      "createdAt": "2026-11-16T18:04:04.220Z",
+      "updatedAt": "2026-11-16T18:04:04.220Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "title": "Food Budget Alert",
+      "message": "Food budget is 57% used (₹4,570 of ₹8,000).",
+      "type": "info",
+      "isRead": false,
+      "_id": "23ebf2b1ad49f9237d6e5853",
+      "createdAt": "2026-11-16T18:04:04.223Z",
+      "updatedAt": "2026-11-16T18:04:04.223Z"
+    },
+    {
+      "userID": "457ff858c62b0c643dfabd2a",
+      "title": "Emergency Fund Progress",
+      "message": "You are 50% close to reaching your Emergency Fund goal!",
+      "type": "info",
+      "isRead": false,
+      "_id": "9259aadd745acc0acc36c9e8",
+      "createdAt": "2026-11-16T18:04:04.227Z",
+      "updatedAt": "2026-11-16T18:04:04.227Z"
+    }
+  ]
+}
