@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useFinance } from '../../context/FinanceContext';
 import {
@@ -55,6 +56,35 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ isOpen, onCl
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [statusMsg, setStatusMsg] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  // Lock background scroll & keyboard/pointer interaction while wizard is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const rootEl = document.getElementById('root');
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    if (rootEl) {
+      rootEl.setAttribute('inert', '');
+      rootEl.setAttribute('aria-hidden', 'true');
+      rootEl.style.filter = 'blur(8px) brightness(0.75)';
+      rootEl.style.pointerEvents = 'none';
+      rootEl.style.userSelect = 'none';
+      rootEl.style.transition = 'filter 200ms ease';
+    }
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      if (rootEl) {
+        rootEl.removeAttribute('inert');
+        rootEl.removeAttribute('aria-hidden');
+        rootEl.style.filter = '';
+        rootEl.style.pointerEvents = '';
+        rootEl.style.userSelect = '';
+        rootEl.style.transition = '';
+      }
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -126,9 +156,22 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ isOpen, onCl
     }
   };
 
-  return (
-    <div className="fixed inset-0 bg-black/45 backdrop-blur-xl z-50 flex items-center justify-center p-4 animate-in fade-in duration-200 select-none font-sans">
-      <div className="bg-[#151518] border border-purple-500/30 rounded-3xl p-7 max-w-xl w-full shadow-2xl space-y-6 relative overflow-hidden">
+  const wizardContent = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto select-none font-sans"
+      role="dialog"
+      aria-modal="true"
+      aria-label="First-Login Setup Wizard"
+    >
+      {/* Full-Viewport Dark & Blurred Backdrop Layer */}
+      <div
+        className="fixed inset-0 bg-black/60 backdrop-blur-[14px]"
+        style={{ WebkitBackdropFilter: 'blur(14px)' }}
+        aria-hidden="true"
+      />
+
+      {/* Crisp, Sharp Setup Wizard Modal Card */}
+      <div className="relative z-10 bg-[#151518] border border-purple-500/30 rounded-3xl p-7 max-w-xl w-full shadow-2xl space-y-6 overflow-hidden my-auto">
         {/* Top Header Badge & Close Button */}
         <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
           <div className="flex items-center gap-2.5">
@@ -561,4 +604,6 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ isOpen, onCl
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined' ? createPortal(wizardContent, document.body) : wizardContent;
 };
