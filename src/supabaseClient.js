@@ -38,11 +38,38 @@ const tabIsolatedAuthStorage = {
   }
 };
 
+let circuitOpenUntil = 0;
+
+const fastFallbackFetch = async (input, init) => {
+  if (Date.now() < circuitOpenUntil) {
+    throw new Error('Supabase circuit breaker open (offline fallback mode)');
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+  try {
+    const response = await fetch(input, {
+      ...init,
+      signal: init?.signal || controller.signal
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    circuitOpenUntil = Date.now() + 60000;
+    throw err;
+  }
+};
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
-    autoRefreshToken: true,
+    autoRefreshToken: false,
     detectSessionInUrl: true,
     storage: tabIsolatedAuthStorage
+  },
+  global: {
+    fetch: fastFallbackFetch
   }
 });

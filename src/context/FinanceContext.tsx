@@ -529,10 +529,7 @@ export const FinanceProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   useEffect(() => {
     refreshData();
-    const handleFocus = () => refreshData();
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
-  }, [user, isGuest]);
+  }, [user?.id, isGuest]);
 
   // Financial summary
   const summary: FinancialSummary = useMemo(() => {

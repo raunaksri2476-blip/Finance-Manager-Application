@@ -100,10 +100,8 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ isOpen, onCl
     if (rootEl) {
       rootEl.setAttribute('inert', '');
       rootEl.setAttribute('aria-hidden', 'true');
-      rootEl.style.filter = 'blur(8px) brightness(0.75)';
       rootEl.style.pointerEvents = 'none';
       rootEl.style.userSelect = 'none';
-      rootEl.style.transition = 'filter 200ms ease';
     }
 
     return () => {
@@ -111,10 +109,8 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ isOpen, onCl
       if (rootEl) {
         rootEl.removeAttribute('inert');
         rootEl.removeAttribute('aria-hidden');
-        rootEl.style.filter = '';
         rootEl.style.pointerEvents = '';
         rootEl.style.userSelect = '';
-        rootEl.style.transition = '';
       }
     };
   }, [isOpen]);

@@ -41,11 +41,43 @@ const tabIsolatedAuthStorage = {
   }
 };
 
+// Circuit-breaker fetch wrapper:
+// 1. Caps every Supabase request at 2500ms so unreachable DNS never hangs UI actions.
+// 2. If the host is unreachable (DNS failure), trips a 60s circuit breaker so all subsequent
+//    Supabase calls fail-fast in 0ms and fall back cleanly to local storage without freezing!
+let circuitOpenUntil = 0;
+
+const fastFallbackFetch: typeof fetch = async (input, init) => {
+  if (Date.now() < circuitOpenUntil) {
+    throw new Error('Supabase circuit breaker open (offline fallback mode)');
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+  try {
+    const response = await fetch(input, {
+      ...init,
+      signal: init?.signal || controller.signal
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    // Trip circuit breaker for 60 seconds on network/DNS failure
+    circuitOpenUntil = Date.now() + 60000;
+    throw err;
+  }
+};
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
-    autoRefreshToken: true,
+    autoRefreshToken: false,
     detectSessionInUrl: true,
     storage: tabIsolatedAuthStorage
+  },
+  global: {
+    fetch: fastFallbackFetch
   }
 });

@@ -57,32 +57,14 @@ export const GoalModal: React.FC<GoalModalProps> = ({
     setIsSubmitting(false);
   }, [editGoal, addMoneyGoal, isOpen]);
 
-  // Full-Viewport background blur and interaction lock while GoalModal is open
+  // Lock body scroll while GoalModal is open (backdrop-blur on overlay handles visual blur without GPU spike)
   useEffect(() => {
     if (!isOpen) return;
-    const rootEl = document.getElementById('root');
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    if (rootEl) {
-      rootEl.setAttribute('inert', '');
-      rootEl.setAttribute('aria-hidden', 'true');
-      rootEl.style.filter = 'blur(8px) brightness(0.75)';
-      rootEl.style.pointerEvents = 'none';
-      rootEl.style.userSelect = 'none';
-      rootEl.style.transition = 'filter 200ms ease';
-    }
-
     return () => {
       document.body.style.overflow = prevOverflow;
-      if (rootEl) {
-        rootEl.removeAttribute('inert');
-        rootEl.removeAttribute('aria-hidden');
-        rootEl.style.filter = '';
-        rootEl.style.pointerEvents = '';
-        rootEl.style.userSelect = '';
-        rootEl.style.transition = '';
-      }
     };
   }, [isOpen]);
 
