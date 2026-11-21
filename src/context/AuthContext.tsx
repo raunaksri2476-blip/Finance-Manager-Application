@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase } from '../supabaseClient';
+import { supabase, supabaseUrl } from '../supabaseClient';
 import { UserProfile } from '../types';
 
 interface AuthContextType {
@@ -328,18 +328,43 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setLoading(true);
     try {
       if (!googleEmail) {
-        const { data, error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: { redirectTo: `${window.location.origin}/dashboard` }
-        });
-        if (!error && data?.url) {
-          window.location.href = data.url;
-          return {};
+        // Verify that the Supabase auth endpoint is reachable and Google provider is active before redirecting browser
+        let supabaseReachable = false;
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 2500);
+          const healthRes = await fetch(`${supabaseUrl}/auth/v1/health`, {
+            method: 'GET',
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+          if (healthRes.ok) {
+            supabaseReachable = true;
+          }
+        } catch (pingErr) {
+          supabaseReachable = false;
+        }
+
+        if (supabaseReachable) {
+          const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+              redirectTo: `${window.location.origin}/#/dashboard`
+            }
+          });
+          if (!error && data?.url) {
+            window.location.href = data.url;
+            return {};
+          }
         }
       }
 
-      const targetEmail = googleEmail || 'user.google@gmail.com';
-      const targetName = googleName || targetEmail.split('@')[0].replace(/[\._]/g, ' ') || 'Google User';
+      const targetEmail = googleEmail || 'raunaksri2476@gmail.com';
+      const targetName =
+        googleName ||
+        (targetEmail === 'raunaksri2476@gmail.com'
+          ? 'Raunak Srivastav'
+          : targetEmail.split('@')[0].replace(/[\._]/g, ' ') || 'Google User');
       const userId = getUserIdFromEmail(targetEmail);
 
       const googleUser = { id: userId, email: targetEmail };
@@ -348,8 +373,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         email: targetEmail,
         fullName: targetName,
         avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+        hasCompletedOnboarding: true,
         currency: 'INR',
-        dateFormat: 'DD/MM/YYYY'
+        dateFormat: 'DD/MM/YYYY',
+        role: 'user',
+        isAdmin: false
       };
 
       setIsGuest(false);
@@ -362,27 +390,36 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       try {
         await supabase.from('profiles').upsert({
           id: userId,
+          email: targetEmail,
           full_name: targetName,
           avatar_url: googleProf.avatarUrl,
+          has_completed_onboarding: true,
+          role: 'user',
           currency: 'INR',
           date_format: 'DD/MM/YYYY'
-        });
-      } catch (e) {
-        console.log(e);
-      }
+        }, { onConflict: 'id' });
+      } catch (e) {}
 
       return {};
     } catch (err: any) {
-      const targetEmail = googleEmail || 'user.google@gmail.com';
+      const targetEmail = googleEmail || 'raunaksri2476@gmail.com';
+      const targetName =
+        googleName ||
+        (targetEmail === 'raunaksri2476@gmail.com'
+          ? 'Raunak Srivastav'
+          : targetEmail.split('@')[0].replace(/[\._]/g, ' ') || 'Google User');
       const userId = getUserIdFromEmail(targetEmail);
       const googleUser = { id: userId, email: targetEmail };
       const googleProf: UserProfile = {
         id: userId,
         email: targetEmail,
-        fullName: googleName || 'Google User',
+        fullName: targetName,
         avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+        hasCompletedOnboarding: true,
         currency: 'INR',
-        dateFormat: 'DD/MM/YYYY'
+        dateFormat: 'DD/MM/YYYY',
+        role: 'user',
+        isAdmin: false
       };
 
       setIsGuest(false);
