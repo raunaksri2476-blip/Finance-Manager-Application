@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isGuest, setIsGuest] = useState<boolean>(() => {
-    return localStorage.getItem('fm_is_guest') === 'true';
+    return (sessionStorage.getItem('fm_is_guest') ?? localStorage.getItem('fm_is_guest')) === 'true';
   });
 
   const fetchProfile = async (userId: string, email: string) => {
@@ -176,8 +176,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           return;
         }
 
-        const savedUser = localStorage.getItem('fm_auth_user');
+        const savedUser = sessionStorage.getItem('fm_auth_user') || localStorage.getItem('fm_auth_user');
         if (savedUser) {
+          sessionStorage.setItem('fm_auth_user', savedUser);
           const parsed = JSON.parse(savedUser);
           setUser(parsed.user);
           setSession(parsed.session);
@@ -215,12 +216,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUser(currentSession.user);
         await fetchProfile(currentSession.user.id, currentSession.user.email || '');
       } else if (event === 'SIGNED_OUT') {
-        setIsGuest(false);
-        localStorage.removeItem('fm_is_guest');
-        localStorage.removeItem('fm_auth_user');
-        setSession(null);
-        setUser(null);
-        setProfile(null);
+        // Only clear this tab's session if this tab itself doesn't have an active sessionStorage auth record
+        if (!sessionStorage.getItem('fm_auth_user')) {
+          setIsGuest(false);
+          sessionStorage.removeItem('fm_is_guest');
+          setSession(null);
+          setUser(null);
+          setProfile(null);
+        }
       }
       setLoading(false);
     });
@@ -231,7 +234,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const saveLocalAuth = (u: any, s: any, p: UserProfile) => {
-    localStorage.setItem('fm_auth_user', JSON.stringify({ user: u, session: s, profile: p }));
+    const serialized = JSON.stringify({ user: u, session: s, profile: p });
+    sessionStorage.setItem('fm_auth_user', serialized);
+    localStorage.setItem('fm_auth_user', serialized);
     if (p) saveRegisteredProfileToStorage(p);
   };
 
@@ -540,7 +545,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const loginAsGuest = () => {
     setIsGuest(true);
-    localStorage.setItem('fm_is_guest', 'true');
+    sessionStorage.setItem('fm_is_guest', 'true');
     const guestUser = { id: GUEST_PROFILE.id, email: GUEST_PROFILE.email };
     setUser(guestUser);
     setSession({ user: guestUser });
@@ -551,15 +556,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = async () => {
     setLoading(true);
     try {
+      // Remove this tab's session first before calling local signOut
+      sessionStorage.removeItem('fm_is_guest');
+      sessionStorage.removeItem('fm_auth_user');
       if (!isGuest) {
-        await supabase.auth.signOut();
+        await supabase.auth.signOut({ scope: 'local' });
       }
     } catch (e) {
       console.error('Logout error:', e);
     } finally {
       setIsGuest(false);
-      localStorage.removeItem('fm_is_guest');
-      localStorage.removeItem('fm_auth_user');
+      sessionStorage.removeItem('fm_is_guest');
+      sessionStorage.removeItem('fm_auth_user');
       setUser(null);
       setSession(null);
       setProfile(null);

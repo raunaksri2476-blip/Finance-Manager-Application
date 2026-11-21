@@ -17,10 +17,35 @@ export const supabaseAnonKey =
     ? envKey.trim()
     : DEFAULT_SUPABASE_KEY;
 
+// Use per-tab sessionStorage with initial seed from localStorage so each browser tab
+// maintains an isolated login session without logging out other open tabs!
+const tabIsolatedAuthStorage = {
+  getItem: (key: string): string | null => {
+    if (typeof window === 'undefined') return null;
+    const sessionVal = window.sessionStorage.getItem(key);
+    if (sessionVal !== null) return sessionVal;
+    const localVal = window.localStorage.getItem(key);
+    if (localVal !== null) {
+      window.sessionStorage.setItem(key, localVal);
+    }
+    return localVal;
+  },
+  setItem: (key: string, value: string): void => {
+    if (typeof window === 'undefined') return;
+    window.sessionStorage.setItem(key, value);
+    window.localStorage.setItem(key, value);
+  },
+  removeItem: (key: string): void => {
+    if (typeof window === 'undefined') return;
+    window.sessionStorage.removeItem(key);
+  }
+};
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: true,
+    storage: tabIsolatedAuthStorage
   }
 });

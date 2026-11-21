@@ -16,10 +16,33 @@ export const supabaseAnonKey =
     ? envKey.trim()
     : DEFAULT_SUPABASE_KEY;
 
+const tabIsolatedAuthStorage = {
+  getItem: (key) => {
+    if (typeof window === 'undefined') return null;
+    const sessionVal = window.sessionStorage.getItem(key);
+    if (sessionVal !== null) return sessionVal;
+    const localVal = window.localStorage.getItem(key);
+    if (localVal !== null) {
+      window.sessionStorage.setItem(key, localVal);
+    }
+    return localVal;
+  },
+  setItem: (key, value) => {
+    if (typeof window === 'undefined') return;
+    window.sessionStorage.setItem(key, value);
+    window.localStorage.setItem(key, value);
+  },
+  removeItem: (key) => {
+    if (typeof window === 'undefined') return;
+    window.sessionStorage.removeItem(key);
+  }
+};
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: true,
+    storage: tabIsolatedAuthStorage
   }
 });
